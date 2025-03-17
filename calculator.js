@@ -1,21 +1,70 @@
-function calculator(num1, operator, num2) {
-  if (typeof num1 !== "number" || typeof num2 !== "number") {
-    throw new Error("Invalid input type, please be sure to input number");
+function calculator(...tokens) {
+  const operands = [];
+  const operators = [];
+  const precedence = {
+    "+": 1,
+    "-": 1,
+    "*": 2,
+    "/": 2,
+  };
+
+  // handler function to check if token is a number
+  const isNumber = (token) => {
+    return typeof token === "number" && !isNaN(token);
+  };
+
+  // handler function to check if token is a valid operator
+  const isOperator = (token) => {
+    return Object.keys(precedence).includes(token);
+  };
+
+  const applyOperation = (num1, operator, num2) => {
+    if (operator === "/" && num2 === 0) throw new Error("Division by zero");
+    switch (operator) {
+      case "+":
+        return num1 + num2;
+      case "-":
+        return num1 - num2;
+      case "*":
+        return num1 * num2;
+      case "/":
+        return num1 / num2;
+    }
+  };
+
+  const processOperators = (operands, operators) => {
+    const num2 = operands.pop();
+    const num1 = operands.pop();
+    operands.push(applyOperation(num1, operators.pop(), num2));
+  };
+
+  for (let idx = 0; idx < tokens.length; idx++) {
+    const token = tokens[idx];
+    //if index is even, it means that the token must be a number
+    if (idx % 2 === 0) {
+      if (!isNumber(token)) throw new Error("Invalid input type");
+      operands.push(token);
+    } else {
+      //if token index is odd it checks if is operator and if it is not throw error
+      if (!isOperator(token)) throw new Error(`Invalid operator`);
+      while (
+        operators.length > 0 &&
+        precedence[operators[operators.length - 1]] >= precedence[token]
+      ) {
+        processOperators(operands, operators);
+      }
+      operators.push(token);
+    }
   }
 
-  switch (operator) {
-    case "+":
-      return num1 + num2;
-    case "-":
-      return num1 - num2;
-    case "*":
-      return num1 * num2;
-    case "/":
-      if (num2 === 0) throw new Error("Division by zero");
-      return a / b;
-    default:
-      throw new Error("Invalid operator");
+  //ensures all pending operations are executed in the correct order
+  while (operators.length > 0) {
+    processOperators(operands, operators);
   }
+
+  //if multiple operands remain, the expression was malformed
+  if (operands.length !== 1) throw new Error("Invalid expression");
+  return operands[0];
 }
 
 module.exports = calculator;
