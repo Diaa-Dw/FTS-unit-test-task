@@ -8,7 +8,7 @@
   "author": "Diaa-dw",
   "license": "ISC",
   "description": "Develop a simple calculator function (calc) that performs basic arithmetic operations and meets all test requirements using Test-Driven Development (TDD).",
-  "dependencies": {
+  "devDependencies": {
     "jest": "^29.7.0"
   }
 }
