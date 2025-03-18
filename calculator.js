@@ -43,7 +43,13 @@ function calculator(...tokens) {
     //if index is even, it means that the token must be a number
     if (idx % 2 === 0) {
       if (!isNumber(token)) throw new Error("Invalid input type");
-      operands.push(token);
+      if (token > 1000) {
+        if (operators.length === 0) throw new Error("Invalid expression");
+        operators.pop();
+        continue;
+      } else {
+        operands.push(token);
+      }
     } else {
       //if token index is odd it checks if is operator and if it is not throw error
       if (!isOperator(token)) throw new Error(`Invalid operator`);
