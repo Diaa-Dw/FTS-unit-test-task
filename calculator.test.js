@@ -56,4 +56,19 @@ describe("Calculator", () => {
   it("Should throw an error for an expression with  extra operators", () => {
     expect(() => calc(2, "+", 3, "*")).toThrow("Invalid expression");
   });
+
+// Test case: Ignoring a single number greater than 1000
+it("should ignore numbers greater than 1000 in the calculation", () => {
+  expect(calc(8, "+", 1001)).toBe(8); // Only 8 should be considered in the calculation
+});
+
+// Test case: Ignoring multiple numbers greater than 1000 in a series of operations
+it("should ignore all numbers greater than 1000 in multiple operations", () => {
+  expect(calc(2, "+", 1001, "+", 2, "*", 1001)).toBe(4); // Only the valid numbers (2 + 2) should be calculated
+});
+
+// Test case: Handling an invalid expression with all numbers greater than 1000
+it("should throw an error if all numbers are greater than 1000", () => {
+  expect(() => calc(1001, "+", 1001, "*", 1001)).toThrow("Invalid expression"); 
+});
 });
