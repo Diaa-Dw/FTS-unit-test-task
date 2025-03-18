@@ -51,4 +51,9 @@ describe("Calculator", () => {
   it("should throw an error for invalid input types", () => {
     expect(() => calc("2", "+", 3)).toThrow("Invalid input type");
   });
+
+  //Test case: Invalid expression
+  it("Should throw an error for an expression with  extra operators", () => {
+    expect(() => calc(2, "+", 3, "*")).toThrow("Invalid expression");
+  });
 });

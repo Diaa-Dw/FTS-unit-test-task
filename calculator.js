@@ -59,11 +59,11 @@ function calculator(...tokens) {
 
   //ensures all pending operations are executed in the correct order
   while (operators.length > 0) {
+    if (operands.length < 2) throw new Error("Invalid expression");
+
     processOperators(operands, operators);
   }
 
-  //if multiple operands remain, the expression was malformed
-  if (operands.length !== 1) throw new Error("Invalid expression");
   return operands[0];
 }
 
